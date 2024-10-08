@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="StyleList.css"/>
+    <title>Game</title>
+</head>
+<body>
+    <div class="Container">
+     <div>
+        <p><label>Score: 0</label></p>
+        <p><label>High Score: 0</label></p>
+        <p class="diff"><label>Difficult:</label>
+        <select type="Dropdown" name="Difficulties">
+            <option name="Difficulties" value="Easy">Easy</option>
+            <option name="Difficulties" value="Medium">Medium</option>
+            <option name="Difficulties" value="Hard">Hard</option>
+        </select>
+        </p>
+     </div>
+     <div>
+        <canvas id="myCanvas" style="border:1px solid #000000;">
+        </canvas>
+     </div>
+     <div>
+        <p><button class="reset"><b>Reset Button</b></button></p>
+     </div>
+    </div>
+</body>
+</html>
