@@ -9,24 +9,22 @@
 </head>
 <body>
     <div class="Container">
-     <div>
-        <p><label>Score: 0</label></p>
-        <p><label>High Score: 0</label></p>
-        <p class="diff"><label>Difficult:</label>
-        <select type="Dropdown" name="Difficulties">
-            <option name="Difficulties" value="Easy">Easy</option>
-            <option name="Difficulties" value="Medium">Medium</option>
-            <option name="Difficulties" value="Hard">Hard</option>
-        </select>
-        </p>
-     </div>
-     <div>
-        <canvas id="myCanvas" style="border:1px solid #000000;">
-        </canvas>
-     </div>
-     <div>
-        <p><button class="reset"><b>Reset Button</b></button></p>
-     </div>
+        <fieldset>
+        <legend><label>Score: 0</label><label>High Score: 0</label>
+            <label>Difficult:
+            <select type="Dropdown" name="Difficulties">
+                <option name="Difficulties" value="Easy">Easy</option>
+                <option name="Difficulties" value="Medium">Medium</option>
+                <option name="Difficulties" value="Hard">Hard</option>
+            </select>        
+            </label> 
+
+        </legend>
+        
+            <button class="reset"><b>Reset Button</b></button>
+       
+    </fieldset>
+     
     </div>
 </body>
 </html>
