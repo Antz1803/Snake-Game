@@ -8,23 +8,206 @@
     <title>Game</title>
 </head>
 <body>
+    <div id='loadingScreen' style='display:flex;'>
+        Loading...
+        <div id='loadingProgress' style='width: 0; height: 20px; background-color: green;'></div>
+    </div>
+    <div class="GameGuide" style='display:none;'>Use arrow keys to move the snake!</div>
     <div class="Container">
         <fieldset>
-        <legend><label>Score: 0</label><label>High Score: 0</label>
-            <label>Difficult:
-            <select type="Dropdown" name="Difficulties">
-                <option name="Difficulties" value="Easy">Easy</option>
-                <option name="Difficulties" value="Medium">Medium</option>
-                <option name="Difficulties" value="Hard">Hard</option>
-            </select>        
-            </label> 
+            <legend>
+                <label class="score">Score: 0</label>
+                <label class="high-score">High Score: 0</label>
+                <label>Difficult:
+                    <select id="difficulty" name="Difficulties">
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>        
+                </label> 
+            </legend>
+            <button id="reset" class="reset"><b>Reset Button</b></button>
+            <button id="pause" style="display: block;">Pause</button>
+            <button id="continue" style="display: none;">Continue</button>
+            <div id='gameWrapper' style='display:none;'>
+                <div class="myCanvas"></div>
+            </div>
+        </fieldset>
 
-        </legend>
-        
-            <button class="reset"><b>Reset Button</b></button>
-       
-    </fieldset>
-     
     </div>
+
+    <script>
+        const playBoard = document.querySelector(".myCanvas");
+        const scoreElement = document.querySelector(".score");
+        const highScoreElement = document.querySelector(".high-score");
+        const difficultySelect = document.getElementById("difficulty");
+        const resetE1 = document.getElementById("reset");
+        const pauseE1 = document.getElementById("pause");
+        const continueE1 = document.getElementById("continue");
+        const controls = document.getElementById("controls");
+        
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingProgress = document.getElementById('loadingProgress');
+        const gameWrapper = document.getElementById('gameWrapper');
+        const gamerGuide = document.querySelector(".GameGuide");
+        
+        let gameOver = false;
+        let foodx, foody;
+        let snakex = 5, snakey = 10;
+        let snakeBody = [];
+        let velocityx = 0, velocityy = 0;
+        let setIntervalId;
+        let score = 0;
+        let gamespeed = 200;
+        
+        let highScore = localStorage.getItem("high-score") || 0;
+        highScoreElement.innerText = `High Score: ${highScore}`;
+        
+        function simulateLoading() {
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                loadingProgress.style.width = progress + '%';
+        
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    loadingScreen.style.display = 'none';
+                    gameWrapper.style.display = 'flex';
+                    gamerGuide.style.display = 'block';
+                    controls.style.display = 'flex';
+        
+                    // Call the function to start your game here
+                    startGame();
+                }
+            }, 300); // Adjust the timing as needed
+        }
+        
+        function startGame() {
+            changeFoodPosition();
+            setIntervalId = setInterval(initGame, gamespeed);
+            document.addEventListener("keydown", changeDirection); // Re-add the keydown listener
+            difficultySelect.addEventListener('change', setDifficulty);
+            resetE1.addEventListener('click', resetGame);
+            pauseE1.addEventListener('click', pauseGame);
+            continueE1.addEventListener('click', continueGame);
+        }
+
+        function pauseGame() {
+            clearInterval(setIntervalId);
+            pauseE1.style.display = 'none';
+            continueE1.style.display = 'block';
+        }
+
+        function continueGame() {
+            setIntervalId = setInterval(initGame, gamespeed);
+            continueE1.style.display = 'none';
+            pauseE1.style.display = 'block';
+        }
+        
+        simulateLoading();
+        
+        const changeFoodPosition = () => {
+            foodx = Math.floor(Math.random() * 30) + 1;
+            foody = Math.floor(Math.random() * 30) + 1;
+        }
+        
+        const handleGameOver = () => {
+            clearInterval(setIntervalId);
+            alert("Game Over! Press OK to replay....");
+            gameOver = true;
+        }
+        
+        const changeDirection = (e) => {
+            if (e.key === "ArrowUp" && velocityy != 1) {
+                velocityx = 0;
+                velocityy = -1;
+            } else if (e.key === "ArrowDown" && velocityy != -1) {
+                velocityx = 0;
+                velocityy = 1;
+            } else if (e.key === "ArrowLeft" && velocityx != 1) {
+                velocityx = -1;
+                velocityy = 0;
+            } else if (e.key === "ArrowRight" && velocityx != -1) {
+                velocityx = 1; 
+                velocityy = 0;
+            }
+            
+            initGame();
+        }
+        
+        function setDifficulty() {
+            const difficulty = difficultySelect.value.toLowerCase();
+            gamespeed = difficulty === "easy" ? 200 : difficulty === "medium" ? 150 : 100;
+
+            clearInterval(setIntervalId);
+            
+            setIntervalId = setInterval(initGame, gamespeed);
+        }
+        
+        const initGame = () => {
+            if (gameOver) return handleGameOver();
+            
+            let htmlMarkup = `<div class ="food" style="grid-area: ${foody} / ${foodx}"></div>`;
+        
+            if (snakex === foodx && snakey === foody) {
+                changeFoodPosition();
+                snakeBody.push([foodx, foody]);
+                score++;
+                
+                highScore = score >= highScore ? score : highScore;
+                localStorage.setItem("high-score", highScore);
+                
+                scoreElement.innerText = `Score: ${score}`;
+                highScoreElement.innerText = `High Score: ${highScore}`;
+            }
+        
+            for (let i = snakeBody.length - 1; i > 0; i--) {
+                snakeBody[i] = snakeBody[i - 1];
+            }
+        
+            snakeBody[0] = [snakex, snakey];
+        
+            snakex += velocityx;
+            snakey += velocityy;
+
+           // Check for wall collision
+           if (snakex <= 0 || snakex > 30 || snakey <= 0 || snakey > 30) {
+               gameOver = true;
+           }
+
+           // Check for self-collision
+           for (let i=0; i<snakeBody.length; i++) {
+               htmlMarkup += `<div class ="head" style="grid-area: ${snakeBody[i][1]} / ${snakeBody[i][0]}"></div>`;
+               if(i !== 0 && snakeBody[0][1] === snakeBody[i][1] && snakeBody[0][0] === snakeBody[i][0]) {
+                   gameOver=true; 
+               }
+           }
+
+           playBoard.innerHTML= htmlMarkup; 
+       }
+
+       const resetGame= () => {
+           gameOver= false; // Reset gameOver flag
+           snakex=5; // Reset snake position
+           snakey=10; 
+           snakeBody=[]; // Clear snake body
+           velocityx=0; // Reset velocity
+           velocityy=0; 
+           score=0; // Reset score
+           scoreElement.innerText=`Score: ${score}`; // Update score display
+           changeFoodPosition(); // Reposition food
+           clearInterval(setIntervalId); // Clear any existing interval
+           startGame(); // Restart the game
+           pauseE1.style.display='block'; 
+           continueE1.style.display='none'; 
+       }
+
+       changeFoodPosition();
+       
+       setIntervalId=setInterval(initGame, gamespeed); 
+       document.addEventListener("keydown", changeDirection); 
+       difficultySelect.addEventListener('change', setDifficulty); 
+        
+    </script>
 </body>
 </html>
