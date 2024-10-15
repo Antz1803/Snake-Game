@@ -2,15 +2,26 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
+    background-image: linear-gradient(to right, #dc2f02, #f48c06, #e85d04, #e85d04);
     margin: 20px;
+    overflow-x: hidden;
 }
 .myCanvas {
-    width: 400px;
-    height: 400px;
-    border: 1px solid black;
+    width: 900px;
+    height: 700px;
+    border: 10px solid #370617;
+    border-radius: 20px;
+    background-color: aquamarine;
     position: relative;
     margin: 20px auto;
 }
+
+.guide{
+position: relative;
+left: 510px;
+top:800px;
+}
+
 .score{
     font-size:23px;
 }
@@ -23,10 +34,10 @@ body {
     position: absolute;
 }
 fieldset {
-    border: 2px solid #007BFF; 
+    border: 2px solid #370617; 
     padding: 20px;
-    margin-top: -429px;
-    margin-left: 223px;
+    margin-top: -529px;
+    margin-left: 23px;
     border-width: 7px;
     border-radius: 20px;
     width: 300px; 
@@ -34,7 +45,7 @@ fieldset {
 legend {
     font-weight: bold;
     font-size: 30px;
-    color: #007BFF; 
+    color: #370617; 
 }
 .controls {
     display: flex;

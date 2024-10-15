@@ -31,7 +31,55 @@
             <button id="continue" style="display: none;">Continue</button>
         </div>
     </fieldset>
-
+    <div class="guide">   
+    <fieldset style="width: 40%;">
+        <legend>Guide</legend>
+        <h2>Welcome to the Snake Game!</h2>
+        <p>Follow these instructions to enjoy the game:</p>
+    
+        <h3>Getting Started</h3>
+        <ol>
+            <li><strong>Select Difficulty</strong>: Before starting, choose your preferred difficulty level from the dropdown menu:
+                <ul>
+                    <li><strong>Easy</strong>: Slower speed, suitable for beginners.</li>
+                    <li><strong>Medium</strong>: Normal speed for a balanced challenge.</li>
+                    <li><strong>Hard</strong>: Faster speed for experienced players.</li>
+                </ul>
+            </li>
+            <li><strong>Start the Game</strong>: Click the <strong>Reset Game</strong> button to initialize the game with the selected difficulty.</li>
+        </ol>
+    
+        <h3>Game Controls</h3>
+        <ul>
+            <li><strong>Arrow Keys</strong>: Use the arrow keys on your keyboard to control the direction of the snake:
+                <ul>
+                    <li><strong>Up Arrow</strong>: Move Up</li>
+                    <li><strong>Down Arrow</strong>: Move Down</li>
+                    <li><strong>Left Arrow</strong>: Move Left</li>
+                    <li><strong>Right Arrow</strong>: Move Right</li>
+                </ul>
+            </li>
+            <li><strong>Escape Key</strong>: Pause or continue the game.</li>
+        </ul>
+    
+        <h3>Game Mechanics</h3>
+        <p><strong>Goal</strong>: Eat the food (represented as a colored square) to grow the snake and increase your score.</p>
+        <p><strong>Score Display</strong>: Your current score and high score are shown at the top.</p>
+        <p><strong>Game Over</strong>: If the snake collides with the walls or itself, the game is over. You will see a message displaying your score.</p>
+    
+        <h3>Additional Features</h3>
+        <ul>
+            <li><strong>Pause and Continue</strong>: You can pause the game using the <strong>Pause</strong> button or the Escape key. Resume with the <strong>Continue</strong> button or the Escape key.</li>
+            <li><strong>Reset Game</strong>: Click the <strong>Reset Game</strong> button anytime to start a new game with your selected difficulty.</li>
+        </ul>
+    
+        <h3>Tips for Success</h3>
+        <p>Stay alert! The snake moves faster as it grows. Plan your moves ahead to avoid colliding with walls or yourself. Keep an eye on your score to beat your personal best!</p>
+    
+        <h3>Enjoy the Game!</h3>
+        <p>Have fun playing and good luck! May your snake grow long and your score high!</p>
+    </fieldset>
+</div>
     <script>
         const canvas = document.querySelector('.myCanvas');
         const scoreLabel = document.querySelector('.score');
@@ -79,20 +127,20 @@
             snake.forEach(segment => {
                 const segmentDiv = document.createElement('div');
                 segmentDiv.classList.add('snake');
-                segmentDiv.style.width = '10px';
-                segmentDiv.style.height = '10px';
-                segmentDiv.style.left = `${segment.x * 10}px`;
-                segmentDiv.style.top = `${segment.y * 10}px`;
+                segmentDiv.style.width = '20px';
+                segmentDiv.style.height = '20px';
+                segmentDiv.style.left = `${segment.x * 20}px`;
+                segmentDiv.style.top = `${segment.y * 20}px`;
                 canvas.appendChild(segmentDiv);
             });
 
             // Draw food
             const foodDiv = document.createElement('div');
             foodDiv.classList.add('food');
-            foodDiv.style.width = '10px';
-            foodDiv.style.height = '10px';
-            foodDiv.style.left = `${food.x * 10}px`;
-            foodDiv.style.top = `${food.y * 10}px`;
+            foodDiv.style.width = '20px';
+            foodDiv.style.height = '20px';
+            foodDiv.style.left = `${food.x * 20}px`;
+            foodDiv.style.top = `${food.y * 20}px`;
             canvas.appendChild(foodDiv);
             
             scoreLabel.textContent = `Score: ${score} | High Score: ${highScore}`;
@@ -119,7 +167,7 @@
             }
 
            // Check for collisions with walls or self
-           if (head.x < 0 || head.x >= canvas.clientWidth / 10 || head.y < 0 || head.y >= canvas.clientHeight / 10 || isCollision(head)) {
+           if (head.x < 0 || head.x >= canvas.clientWidth / 20 || head.y < 0 || head.y >= canvas.clientHeight / 20 || isCollision(head)) {
                alert("Game Over! Your score was " + score);
                resetGame();
                return;
@@ -133,8 +181,8 @@
        }
 
        function placeFood() {
-           food.x = Math.floor(Math.random() * (canvas.clientWidth / 10));
-           food.y = Math.floor(Math.random() * (canvas.clientHeight / 10));
+           food.x = Math.floor(Math.random() * (canvas.clientWidth / 20));
+           food.y = Math.floor(Math.random() * (canvas.clientHeight / 20));
        }
 
        function startGame() {
